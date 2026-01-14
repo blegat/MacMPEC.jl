@@ -50,7 +50,6 @@ function dat_path(p::Problem)
     # For `design-cent-21`, the `dat_file` is `design-cent-2.dat`, without the `1`
     # so we cannot just do `"$(p.name).dat"`
     path = joinpath(dirname(dirname(pathof(MacMPEC))), "data", "problems", p.dat_file)
-    @show p.dat_file
     @assert isfile(path)
     return path
 end
