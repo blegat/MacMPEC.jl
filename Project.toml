@@ -1,0 +1,12 @@
+name = "MacMPEC"
+uuid = "1013378d-6ea4-4bca-aea7-15d787ee0cec"
+version = "0.1.0"
+authors = ["Benoît Legat <benoit.legat@gmail.com>"]
+
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+
+[compat]
+CSV = "0.10.15"
+DataFrames = "1.8.1"

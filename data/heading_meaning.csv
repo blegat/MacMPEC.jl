@@ -1,0 +1,6 @@
+heading,meaning
+name,"the name of the problem, click for a short reference"
+mod file,the corresponding ampl model file
+dat file,the corresponding ampl data file
+classification,classification of the MPEC
+solution,optimal objective value or best solution found; (I) if infeasible
