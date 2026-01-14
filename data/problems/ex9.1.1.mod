@@ -37,3 +37,18 @@ subject to
 
    compl{i in I}: 0 <= l[i]   complements   s[i] >= 0;
 
+# ... optimal solution due to Alex Rubinov, University of Ballarat
+### data;
+### let y1 := 4;
+### let y2 := 2;
+### let x  := 5;
+### let l[1] := 0;
+### let l[2] := 0;
+### let l[3] := 0;
+### let l[4] := 0;
+### let l[5] := 1;
+### let s[1] := 14;
+### let s[2] := 0;
+### let s[3] := 0;
+### let s[4] := 4;
+### let s[5] := 0;

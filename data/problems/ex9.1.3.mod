@@ -47,3 +47,4 @@ subject to
 
    # ... Complementarity Constraints
    compl {i in I}: 0 <= l[i]    complements   s[i] >= 0;
+
