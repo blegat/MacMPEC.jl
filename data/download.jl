@@ -19,7 +19,7 @@ collection = CSV.read(joinpath(@__DIR__, "collection.csv"), DataFrame)
     end
     response = HTTP.get(url)
     @assert response.status == 200
-    open(joinpath(@__DIR__, "problems", mod_file), "w") do f
+    open(joinpath(@__DIR__, "ampl", mod_file), "w") do f
         write(f, String(response.body))
     end
 end
@@ -33,7 +33,7 @@ end
     url = "http://www.mcs.anl.gov/~leyffer/MacMPEC/problems/$dat_file"
     response = HTTP.get(url)
     @assert response.status == 200
-    open(joinpath(@__DIR__, "problems", dat_file), "w") do f
+    open(joinpath(@__DIR__, "ampl", dat_file), "w") do f
         write(f, String(response.body))
     end
 end

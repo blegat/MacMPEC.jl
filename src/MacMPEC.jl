@@ -40,16 +40,16 @@ function problem(name::AbstractString)
     return Problem(name, mod_file, dat_file, COLLECTION.classification[idx], status, solution)
 end
 
-const PROBLEMS_DIR = joinpath(dirname(dirname(pathof(MacMPEC))), "data", "problems")
+const AMPL_DIR = joinpath(dirname(dirname(pathof(MacMPEC))), "data", "ampl")
 
 function dat_path(p::Problem)
     if isnothing(p.dat_file)
-        @assert !isfile(joinpath(PROBLEMS_DIR, "$(p.name).dat"))
+        @assert !isfile(joinpath(AMPL_DIR, "$(p.name).dat"))
         return
     end
     # For `design-cent-21`, the `dat_file` is `design-cent-2.dat`, without the `1`
     # so we cannot just do `"$(p.name).dat"`
-    path = joinpath(dirname(dirname(pathof(MacMPEC))), "data", "problems", p.dat_file)
+    path = joinpath(AMPL_DIR, p.dat_file)
     @assert isfile(path)
     return path
 end
