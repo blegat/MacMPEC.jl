@@ -1,0 +1,9 @@
+using JuMP
+function build_model()
+    model = Model()
+    @variable(model, z1 >= 0)
+    @variable(model, z2 >= 0)
+    @constraint(model, compl, z1 ⟂ z2)
+    @objective(model, Min, z1 + z2)
+    return model
+end
