@@ -1,0 +1,36 @@
+# Convert every AMPL `.mod` in `data/ampl` to a JuMP `.jl` in `data/jump`
+# using JuMPConverter.jl. Each `.dat` companion is converted to a
+# directory of CSVs (one file per parameter/set), so the generated
+# `build_model("<dat-stem>/")` path-loader can pick them up via the
+# `isdir(path)` branch.
+#
+# Run from a Julia project that has both MacMPEC and JuMPConverter
+# available (e.g. `julia --project=. data/convert.jl`).
+
+using MacMPEC
+using JuMPConverter
+
+const JUMP_DIR = joinpath(@__DIR__, "jump")
+mkpath(JUMP_DIR)
+
+models = Dict{String,JuMPConverter.Model}()
+for row in eachrow(MacMPEC.collection())
+    mod_file = row["mod file"]
+    dat_file = row["dat file"]
+    model = get(models, mod_file, nothing)
+    if model === nothing
+        mod_in = joinpath(MacMPEC.AMPL_DIR, mod_file)
+        jl_out = joinpath(JUMP_DIR, replace(mod_file, r"\.mod$" => ".jl"))
+        # The first `.dat` seen for this `.mod` doubles as the
+        # `example_dat`, so any `fix` statements it carries become
+        # `fix_<…>` kwargs of the generated `build_model`.
+        example_dat = dat_file == "n/a" ? nothing : joinpath(MacMPEC.AMPL_DIR, dat_file)
+        model = JuMPConverter.AMPL.read_model(mod_in; example_dat)
+        open(io -> println(io, model), jl_out, "w")
+        models[mod_file] = model
+    end
+    if dat_file != "n/a"
+        csv_dir = joinpath(JUMP_DIR, replace(dat_file, r"\.dat$" => ""))
+        JuMPConverter.AMPL.dat_to_csv(joinpath(MacMPEC.AMPL_DIR, dat_file), model, csv_dir)
+    end
+end
