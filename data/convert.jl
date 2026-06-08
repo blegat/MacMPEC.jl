@@ -13,7 +13,6 @@ using JuMPConverter
 const JUMP_DIR = joinpath(@__DIR__, "jump")
 mkpath(JUMP_DIR)
 
-failures = Tuple{String,String}[]
 models = Dict{String,JuMPConverter.Model}()
 for row in eachrow(MacMPEC.collection())
     mod_file = row["mod file"]
@@ -25,35 +24,13 @@ for row in eachrow(MacMPEC.collection())
         # The first `.dat` seen for this `.mod` doubles as the
         # `example_dat`, so any `fix` statements it carries become
         # `fix_<…>` kwargs of the generated `build_model`.
-        example_dat =
-            dat_file == "n/a" ? nothing :
-            joinpath(MacMPEC.AMPL_DIR, dat_file)
-        try
-            model = JuMPConverter.AMPL.read_model(mod_in; example_dat)
-            open(io -> println(io, model), jl_out, "w")
-            models[mod_file] = model
-        catch err
-            push!(failures, (mod_file, sprint(showerror, err)))
-            continue
-        end
+        example_dat = dat_file == "n/a" ? nothing : joinpath(MacMPEC.AMPL_DIR, dat_file)
+        model = JuMPConverter.AMPL.read_model(mod_in; example_dat)
+        open(io -> println(io, model), jl_out, "w")
+        models[mod_file] = model
     end
     if dat_file != "n/a"
         csv_dir = joinpath(JUMP_DIR, replace(dat_file, r"\.dat$" => ""))
-        try
-            JuMPConverter.AMPL.dat_to_csv(
-                joinpath(MacMPEC.AMPL_DIR, dat_file),
-                model,
-                csv_dir,
-            )
-        catch err
-            push!(failures, (dat_file, sprint(showerror, err)))
-        end
-    end
-end
-
-if !isempty(failures)
-    println(stderr, "Conversion failed for $(length(failures)) file(s):")
-    for (f, msg) in failures
-        println(stderr, "  - ", f, ": ", msg)
+        JuMPConverter.AMPL.dat_to_csv(joinpath(MacMPEC.AMPL_DIR, dat_file), model, csv_dir)
     end
 end
