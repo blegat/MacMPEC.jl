@@ -25,6 +25,7 @@ function build_model(; I = 1:2, lbar, kbar, c0, betal, rev, sigma, alpha = JuMP.
     @constraint(model, REV_CONST, GOVT >= PL * rev ⟂ MU)
     @constraint(model, TAX[i in I], T[i] >= MU * TAU[i] ⟂ T[i])
     @objective(model, Max, C)
+    JuMP.fix(model[:PL], 1.0; force = true)
     return model
 end
 

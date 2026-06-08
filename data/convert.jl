@@ -22,8 +22,14 @@ for row in eachrow(MacMPEC.collection())
     if model === nothing
         mod_in = joinpath(MacMPEC.AMPL_DIR, mod_file)
         jl_out = joinpath(JUMP_DIR, replace(mod_file, r"\.mod$" => ".jl"))
+        # The first `.dat` seen for this `.mod` doubles as the
+        # `example_dat`, so any `fix` statements it carries become
+        # `fix_<…>` kwargs of the generated `build_model`.
+        example_dat =
+            dat_file == "n/a" ? nothing :
+            joinpath(MacMPEC.AMPL_DIR, dat_file)
         try
-            model = JuMPConverter.AMPL.read_model(mod_in)
+            model = JuMPConverter.AMPL.read_model(mod_in; example_dat)
             open(io -> println(io, model), jl_out, "w")
             models[mod_file] = model
         catch err

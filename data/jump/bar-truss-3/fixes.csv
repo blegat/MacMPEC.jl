@@ -1,0 +1,3 @@
+value
+JuMPConverter.FixStatement(:H, Any[:i, "y1", "y2"], 0.0, JuMPConverter.FixIter(:i, :m))
+JuMPConverter.FixStatement(:H, Any[:i, "y2", "y1"], 0.0, JuMPConverter.FixIter(:i, :m))
